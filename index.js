@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const https = require('https');
+const fs = require('fs');
 const db = require("./config/db.js"); // Import your database connection from db.js
 const sgMail = require('@sendgrid/mail');
 const app = express();
@@ -25,7 +27,13 @@ app.use(cors({
 }));
 // Set the SendGrid API key
 sgMail.setApiKey(sendgridApiKey);
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/moneyhive-mw.com/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/moneyhive-mw.com/fullchain.pem', 'utf8');
 
+const credentials = { key: privateKey, cert: certificate };
+
+
+const httpsServer = https.createServer(credentials, app);
 
 
 // Define a route for fetching and printing "portifolio" data as JSON
@@ -322,7 +330,6 @@ app.get("/api/users/ideas/:userId", (req, res) => {
 });
 // set port, listen for requests
 const PORT = 2000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-    console.log(sendgridApiKey);
-});
+httpsServer.listen(PORT, () => {
+    console.log(`Server running on https://moneyhive-mw.com:${PORT}`);
+  })
