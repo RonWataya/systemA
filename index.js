@@ -27,8 +27,9 @@ app.use(cors({
 }));
 // Set the SendGrid API key
 sgMail.setApiKey(sendgridApiKey);
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/moneyhive-mw.com/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/moneyhive-mw.com/fullchain.pem', 'utf8');
+
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/malh.fun/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/malh.fun/fullchain.pem', 'utf8');
 
 const credentials = { key: privateKey, cert: certificate };
 
@@ -332,4 +333,11 @@ app.get("/api/users/ideas/:userId", (req, res) => {
 const PORT = 2000;
 httpsServer.listen(PORT, () => {
     console.log(`Server running on https://moneyhive-mw.com:${PORT}`);
-  })
+  });
+/*
+  
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}.`);
+    console.log(sendgridApiKey);
+});*/
+
